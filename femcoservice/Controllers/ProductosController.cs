@@ -55,7 +55,7 @@ namespace femcoservice.Controllers
             {
 
                 var pic = string.Empty;
-                var folder = "~/Content/Images";
+                var folder = "~/Content/Images|";
 
                 if (view.ImagenFile != null)
                 {
@@ -74,7 +74,13 @@ namespace femcoservice.Controllers
 
         private Producto ToProducto(ProductoView view)
         {
-            return new Producto { Image = view.Image, Nombre = view.Nombre, Price = view.Price, IsActive = view.IsActive, UltimaCompra = view.UltimaCompra, Observacion = view.Observacion, };
+            return new Producto {
+                Image = view.Image,
+                Nombre = view.Nombre,
+                Price = view.Price,
+                UltimaCompra = view.UltimaCompra,
+                IsActive = view.IsActive,
+                Observacion = view.Observacion, };
         }
 
         // GET: Productos/Edit/5
