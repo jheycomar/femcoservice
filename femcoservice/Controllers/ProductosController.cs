@@ -55,7 +55,7 @@ namespace femcoservice.Controllers
             {
 
                 var pic = string.Empty;
-                var folder = "~/Content/Images|";
+                var folder = "~/Content/Images";
 
                 if (view.ImagenFile != null)
                 {
