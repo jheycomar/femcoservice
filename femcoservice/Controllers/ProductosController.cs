@@ -12,12 +12,15 @@ namespace femcoservice.Controllers
 {
     public class ProductosController : Controller
     {
-        private DataContext db = new DataContext();
-
+        private DataContext db ;
+        public ProductosController()
+        {
+            db = new DataContext();
+        }
         // GET: Productos
         public ActionResult Index()
         {
-            return View(db.Productoes.ToList());
+            return View(db.Productoes.OrderBy(f=>f.Nombre).ToList());
         }
 
         // GET: Productos/Details/5
@@ -27,11 +30,12 @@ namespace femcoservice.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Producto producto = db.Productoes.Find(id);
+            var producto = db.Productoes.Find(id);
             if (producto == null)
             {
                 return HttpNotFound();
             }
+
             return View(producto);
         }
 
@@ -41,12 +45,10 @@ namespace femcoservice.Controllers
             return View();
         }
 
-        // POST: Productos/Create
-        // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que desea enlazarse. Para obtener 
-        // más información vea http://go.microsoft.com/fwlink/?LinkId=317598.
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "producId,Nombre,Price")] Producto producto)
+        public ActionResult Create([Bind(Include = "producId,Image,Nombre,Price,UltimaCompra,IsActive,Observacion")] Producto producto)
         {
             if (ModelState.IsValid)
             {
@@ -78,7 +80,7 @@ namespace femcoservice.Controllers
         // más información vea http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "producId,Nombre,Price")] Producto producto)
+        public ActionResult Edit([Bind(Include = "producId,Image,Nombre,Price,UltimaCompra,IsActive,Observacion")] Producto producto)
         {
             if (ModelState.IsValid)
             {
