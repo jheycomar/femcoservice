@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using femcoservice.Models;
+using femcoservice.Classe;
 
 namespace femcoservice.Controllers
 {
@@ -48,16 +49,32 @@ namespace femcoservice.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "producId,Image,Nombre,Price,UltimaCompra,IsActive,Observacion")] Producto producto)
+        public ActionResult Create( ProductoView view)
         {
             if (ModelState.IsValid)
             {
+
+                var pic = string.Empty;
+                var folder = "~/Content/Images";
+
+                if (view.ImagenFile != null)
+                {
+                    pic = FilesHelper.UploadPhoto(view.ImagenFile, folder);
+                    pic = string.Format("{0}/{1}", folder, pic);
+                }
+                var producto = ToProducto(view);
+                producto.Image = pic;
                 db.Productoes.Add(producto);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(producto);
+            return View(view);
+        }
+
+        private Producto ToProducto(ProductoView view)
+        {
+            return new Producto { Image = view.Image, Nombre = view.Nombre, Price = view.Price, IsActive = view.IsActive, UltimaCompra = view.UltimaCompra, Observacion = view.Observacion, };
         }
 
         // GET: Productos/Edit/5
