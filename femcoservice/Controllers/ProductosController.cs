@@ -49,7 +49,7 @@ namespace femcoservice.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create( ProductoView view)
+        public ActionResult Create(ProductoView view)
         {
             if (ModelState.IsValid)
             {
@@ -95,23 +95,46 @@ namespace femcoservice.Controllers
             {
                 return HttpNotFound();
             }
-            return View(producto);
+            return View(ToView(producto));
         }
 
-        // POST: Productos/Edit/5
-        // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que desea enlazarse. Para obtener 
-        // más información vea http://go.microsoft.com/fwlink/?LinkId=317598.
+        private ProductoView ToView(Producto producto)
+        {
+            return new ProductoView
+            {
+                Image = producto.Image,
+                Nombre = producto.Nombre,
+                Price = producto.Price,
+                UltimaCompra = producto.UltimaCompra,
+                IsActive = producto.IsActive,
+                Observacion = producto.Observacion,
+            };
+        }
+
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "producId,Image,Nombre,Price,UltimaCompra,IsActive,Observacion")] Producto producto)
+        public ActionResult Edit(ProductoView view)
         {
             if (ModelState.IsValid)
             {
+                var pic = view.Image;
+                var folder = "~/Content/Images";
+
+                if (view.ImagenFile != null)
+                {
+                    pic = FilesHelper.UploadPhoto(view.ImagenFile, folder);
+                    pic = string.Format("{0}/{1}", folder, pic);
+                }
+                var producto = ToProducto(view);
+                producto.Image = pic;
+
+              //  db.Productoes.Add(producto);
                 db.Entry(producto).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(producto);
+            return View(view);
         }
 
         // GET: Productos/Delete/5

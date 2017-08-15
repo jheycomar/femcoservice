@@ -25,7 +25,7 @@ namespace femcoservice.Models
         [Required(ErrorMessage = "you must enter a {0}")]
         public decimal Price { get; set; }
 
-        [DataType(DataType.Date)]
+       
         [Display(Name = "Ultima Compra")]
         public DateTime? UltimaCompra { get; set; }
 
