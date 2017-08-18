@@ -75,6 +75,7 @@ namespace femcoservice.Controllers
         private Producto ToProducto(ProductoView view)
         {
             return new Producto {
+                producId=view.producId,
                 Image = view.Image,
                 Nombre = view.Nombre,
                 Price = view.Price,
@@ -102,6 +103,7 @@ namespace femcoservice.Controllers
         {
             return new ProductoView
             {
+                producId = producto.producId,
                 Image = producto.Image,
                 Nombre = producto.Nombre,
                 Price = producto.Price,
